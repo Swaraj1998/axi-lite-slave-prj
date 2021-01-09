@@ -21,8 +21,8 @@ read_vhdl -vhdl2008 ../vivado_pkg.vhd
 
 # read_xdc ../top.xdc
 read_xdc ../fclk.xdc
-read_xdc ../pin_i2c.xdc
-read_xdc ../pin_rf.xdc
+#read_xdc ../pin_i2c.xdc
+#read_xdc ../pin_rf.xdc
 
 set_property PART xc7z020clg400-1 [current_project]
 set_property BOARD_PART em.avnet.com:microzed_7020:part0:1.1 [current_project]
@@ -62,7 +62,7 @@ set_property BITSTREAM.CONFIG.USERID "DEADC0DE" [current_design]
 set_property BITSTREAM.CONFIG.USR_ACCESS TIMESTAMP [current_design]
 set_property BITSTREAM.READBACK.ACTIVERECONFIG Yes [current_design]
 
-write_bitstream -force $ODIR/i2cmin_axi_slave_reg.bit
+write_bitstream -force $ODIR/axi_slave_reg.bit
 
 # STEP#6: generate reports
 

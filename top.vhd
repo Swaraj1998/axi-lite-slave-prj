@@ -1,16 +1,16 @@
 ----------------------------------------------------------------------------
 --  top.vhd
---	MicroZed I2C Passthrough
+--	MicroZed AXI Lite Slave (with user registers)
 --	Version 1.0
 --
---  Copyright (C) 2019 H.Poetzl
+--  Copyright (C) 2021 Swaraj Hota
 --
 --	This program is free software: you can redistribute it and/or
 --	modify it under the terms of the GNU General Public License
 --	as published by the Free Software Foundation, either version
 --	2 of the License, or (at your option) any later version.
 --
---  Vivado 2017.4:
+--  Vivado 2020.2:
 --    mkdir -p build.vivado
 --    (cd build.vivado && vivado -mode tcl -source ../vivado.tcl)
 ----------------------------------------------------------------------------
@@ -31,14 +31,6 @@ use work.axi3ml_pkg.ALL;
 use work.axi3s_pkg.ALL;
 
 entity top is
-    port (
-  	i2c_scl : inout std_logic;	-- icsp clock
-  	i2c_sda : inout std_logic;	-- icsp data
-	--
-	rfe_pclk : out std_logic;
-	rfw_pclk : out std_logic
-    );
-
 end entity top;
 
 
@@ -46,31 +38,6 @@ architecture RTL of top is
 
     signal ps_fclk : std_logic_vector (3 downto 0);
     signal ps_reset_n : std_logic_vector (3 downto 0);
-
-    signal rfe_clk : std_logic;
-    signal rfw_clk : std_logic;
-
-    --------------------------------------------------------------------
-    -- I2C Signals
-    --------------------------------------------------------------------
-
-    signal i2c_sda_i : std_logic;
-    signal i2c_sda_o : std_logic;
-    signal i2c_sda_t : std_logic;
-
-    signal i2c_scl_i : std_logic;
-    signal i2c_scl_o : std_logic;
-    signal i2c_scl_t : std_logic;
-
-    signal i2c1_sda_i : std_logic;
-    signal i2c1_sda_o : std_logic;
-    signal i2c1_sda_t : std_logic;
-    signal i2c1_sda_t_n : std_logic;
-
-    signal i2c1_scl_i : std_logic;
-    signal i2c1_scl_o : std_logic;
-    signal i2c1_scl_t : std_logic;
-    signal i2c1_scl_t_n : std_logic;
 
     --------------------------------------------------------------------
     -- PS7 AXI Master Signals
@@ -99,15 +66,6 @@ begin
 	port map (
 	    ps_fclk => ps_fclk,
 	    ps_reset_n => ps_reset_n,
-	    --
-	    i2c1_sda_i => i2c1_sda_i,
-	    i2c1_sda_o => i2c1_sda_o,
-	    i2c1_sda_t_n => i2c1_sda_t_n,
-	    --
-	    i2c1_scl_i => i2c1_scl_i,
-	    i2c1_scl_o => i2c1_scl_o,
-	    i2c1_scl_t_n => i2c1_scl_t_n,
-		--
 		--
 	    m_axi0_aclk => m_axi0_aclk,
 	    m_axi0_areset_n => m_axi0_areset_n,
@@ -149,6 +107,10 @@ begin
 	    m_axi0_bvalid => m_axi0_wi.bvalid,
 		m_axi0_bready => m_axi0_wo.bready );
 
+    --------------------------------------------------------------------
+    -- AXI Lite Mapper
+    --------------------------------------------------------------------
+
 	axi_lite_inst : entity work.axi_lite
 		port map (
 			s_axi_aclk => m_axi0_aclk,
@@ -163,6 +125,10 @@ begin
 			m_axi_ri => m_axi0l_ri,
 			m_axi_wo => m_axi0l_wo,
 			m_axi_wi => m_axi0l_wi );
+
+    --------------------------------------------------------------------
+    -- AXI Lite Slave
+    --------------------------------------------------------------------
 
 	axi_lite_slave_inst : entity work.axi_lite_slave
 		port map (
@@ -192,60 +158,5 @@ begin
 			s_axi_bresp => m_axi0_wi.bresp,
 			s_axi_bvalid => m_axi0_wi.bvalid,
 			s_axi_bready => m_axi0_wo.bready );
-
-    BUFG_ce_inst : BUFG
-        port map (
-            I => ps_fclk(1),
-            O => rfe_clk );
-
-    ODDR_ce_inst : ODDR
-	port map (
-	    C => rfe_clk, Q => rfe_pclk,
-	    CE => '1', R => '0', S => '0',
-	    D1 => '1', D2 => '0');
-
-    BUFG_cw_inst : BUFG
-        port map (
-            I => ps_fclk(2),
-            O => rfw_clk );
-
-    ODDR_cw_inst : ODDR
-	port map (
-	    C => rfw_clk, Q => rfw_pclk,
-	    CE => '1', R => '0', S => '0',
-	    D1 => '1', D2 => '0');
-
-    --------------------------------------------------------------------
-    -- I2C Interface
-    --------------------------------------------------------------------
-
-    i2c_sda_o <= i2c1_sda_o;
-    i2c_sda_t <= i2c1_sda_t;
-
-    i2c1_sda_i <= i2c_sda_i;
-    i2c1_sda_t <= not i2c1_sda_t_n;
-
-    IOBUF_sda_inst : IOBUF
-	port map (
-	    I => i2c_sda_o, O => i2c_sda_i,
-	    T => i2c_sda_t, IO => i2c_sda );
-
-    PULLUP_sda_inst : PULLUP
-        port map ( O => i2c_sda );
-
-    i2c_scl_o <= i2c1_scl_o;
-    i2c_scl_t <= i2c1_scl_t;
-
-    i2c1_scl_i <= i2c_scl_i;
-    i2c1_scl_t <= not i2c1_scl_t_n;
-
-    IOBUF_scl_inst : IOBUF
-	port map (
-	    I => i2c_scl_o, O => i2c_scl_i,
-	    T => i2c_scl_t, IO => i2c_scl );
-
-    PULLUP_scl_inst : PULLUP
-        port map ( O => i2c_scl );
-
 
 end RTL;
