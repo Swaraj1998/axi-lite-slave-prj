@@ -43,8 +43,8 @@ architecture RTL of top is
     -- PS7 AXI Master Signals
     --------------------------------------------------------------------
 
-	signal m_axi0_aclk : std_logic;
-	signal m_axi0_areset_n : std_logic;
+    signal m_axi0_aclk : std_logic;
+    signal m_axi0_areset_n : std_logic;
 
     signal m_axi0_ri : axi3m_read_in_r;
     signal m_axi0_ro : axi3m_read_out_r;
@@ -64,47 +64,47 @@ begin
 
     ps7_stub_inst : entity work.ps7_stub
 	port map (
-	    ps_fclk => ps_fclk,
-	    ps_reset_n => ps_reset_n,
+		ps_fclk => ps_fclk,
+		ps_reset_n => ps_reset_n,
 		--
-	    m_axi0_aclk => m_axi0_aclk,
-	    m_axi0_areset_n => m_axi0_areset_n,
-	    --
-	    m_axi0_arid => m_axi0_ro.arid,
-	    m_axi0_araddr => m_axi0_ro.araddr,
-	    m_axi0_arburst => m_axi0_ro.arburst,
-	    m_axi0_arlen => m_axi0_ro.arlen,
-	    m_axi0_arsize => m_axi0_ro.arsize,
-	    m_axi0_arprot => m_axi0_ro.arprot,
-	    m_axi0_arvalid => m_axi0_ro.arvalid,
-	    m_axi0_arready => m_axi0_ri.arready,
-	    --
-	    m_axi0_rid => m_axi0_ri.rid,
-	    m_axi0_rdata => m_axi0_ri.rdata,
-	    m_axi0_rlast => m_axi0_ri.rlast,
-	    m_axi0_rresp => m_axi0_ri.rresp,
-	    m_axi0_rvalid => m_axi0_ri.rvalid,
-	    m_axi0_rready => m_axi0_ro.rready,
-	    --
-	    m_axi0_awid => m_axi0_wo.awid,
-	    m_axi0_awaddr => m_axi0_wo.awaddr,
-	    m_axi0_awburst => m_axi0_wo.awburst,
-	    m_axi0_awlen => m_axi0_wo.awlen,
-	    m_axi0_awsize => m_axi0_wo.awsize,
-	    m_axi0_awprot => m_axi0_wo.awprot,
-	    m_axi0_awvalid => m_axi0_wo.awvalid,
-	    m_axi0_awready => m_axi0_wi.awready,
-	    --
-	    m_axi0_wid => m_axi0_wo.wid,
-	    m_axi0_wdata => m_axi0_wo.wdata,
-	    m_axi0_wstrb => m_axi0_wo.wstrb,
-	    m_axi0_wlast => m_axi0_wo.wlast,
-	    m_axi0_wvalid => m_axi0_wo.wvalid,
-	    m_axi0_wready => m_axi0_wi.wready,
-	    --
-	    m_axi0_bid => m_axi0_wi.bid,
-	    m_axi0_bresp => m_axi0_wi.bresp,
-	    m_axi0_bvalid => m_axi0_wi.bvalid,
+		m_axi0_aclk => m_axi0_aclk,
+		m_axi0_areset_n => m_axi0_areset_n,
+		--
+		m_axi0_arid => m_axi0_ro.arid,
+		m_axi0_araddr => m_axi0_ro.araddr,
+		m_axi0_arburst => m_axi0_ro.arburst,
+		m_axi0_arlen => m_axi0_ro.arlen,
+		m_axi0_arsize => m_axi0_ro.arsize,
+		m_axi0_arprot => m_axi0_ro.arprot,
+		m_axi0_arvalid => m_axi0_ro.arvalid,
+		m_axi0_arready => m_axi0_ri.arready,
+		--
+		m_axi0_rid => m_axi0_ri.rid,
+		m_axi0_rdata => m_axi0_ri.rdata,
+		m_axi0_rlast => m_axi0_ri.rlast,
+		m_axi0_rresp => m_axi0_ri.rresp,
+		m_axi0_rvalid => m_axi0_ri.rvalid,
+		m_axi0_rready => m_axi0_ro.rready,
+		--
+		m_axi0_awid => m_axi0_wo.awid,
+		m_axi0_awaddr => m_axi0_wo.awaddr,
+		m_axi0_awburst => m_axi0_wo.awburst,
+		m_axi0_awlen => m_axi0_wo.awlen,
+		m_axi0_awsize => m_axi0_wo.awsize,
+		m_axi0_awprot => m_axi0_wo.awprot,
+		m_axi0_awvalid => m_axi0_wo.awvalid,
+		m_axi0_awready => m_axi0_wi.awready,
+		--
+		m_axi0_wid => m_axi0_wo.wid,
+		m_axi0_wdata => m_axi0_wo.wdata,
+		m_axi0_wstrb => m_axi0_wo.wstrb,
+		m_axi0_wlast => m_axi0_wo.wlast,
+		m_axi0_wvalid => m_axi0_wo.wvalid,
+		m_axi0_wready => m_axi0_wi.wready,
+		--
+		m_axi0_bid => m_axi0_wi.bid,
+		m_axi0_bresp => m_axi0_wi.bresp,
+		m_axi0_bvalid => m_axi0_wi.bvalid,
 		m_axi0_bready => m_axi0_wo.bready );
 
     --------------------------------------------------------------------
