@@ -58,6 +58,8 @@ architecture RTL of top is
 
 begin
 
+	m_axi0_aclk <= ps_fclk(0);
+
     --------------------------------------------------------------------
     -- PS7 Interface
     --------------------------------------------------------------------
@@ -111,52 +113,52 @@ begin
     -- AXI Lite Mapper
     --------------------------------------------------------------------
 
-	axi_lite_inst : entity work.axi_lite
-		port map (
-			s_axi_aclk => m_axi0_aclk,
-			s_axi_areset_n => m_axi0_areset_n,
-			
-			s_axi_ro => m_axi0_ri,
-			s_axi_ri => m_axi0_ro,
-			s_axi_wo => m_axi0_wi,
-			s_axi_wi => m_axi0_wo,
+    axi_lite_inst : entity work.axi_lite
+	port map (
+		s_axi_aclk => m_axi0_aclk,
+		s_axi_areset_n => m_axi0_areset_n,
+		
+		s_axi_ro => m_axi0_ri,
+		s_axi_ri => m_axi0_ro,
+		s_axi_wo => m_axi0_wi,
+		s_axi_wi => m_axi0_wo,
 
-			m_axi_ro => m_axi0l_ro,
-			m_axi_ri => m_axi0l_ri,
-			m_axi_wo => m_axi0l_wo,
-			m_axi_wi => m_axi0l_wi );
+		m_axi_ro => m_axi0l_ro,
+		m_axi_ri => m_axi0l_ri,
+		m_axi_wo => m_axi0l_wo,
+		m_axi_wi => m_axi0l_wi );
 
     --------------------------------------------------------------------
     -- AXI Lite Slave
     --------------------------------------------------------------------
 
-	axi_lite_slave_inst : entity work.axi_lite_slave
-		port map (
-			s_axi_aclk => m_axi0_aclk,	
-			s_axi_areset_n => m_axi0_areset_n,
-			--
-			s_axi_araddr => m_axi0_ro.araddr,
-			s_axi_arprot => m_axi0_ro.arprot,
-			s_axi_arvalid => m_axi0_ro.arvalid,
-			s_axi_arready => m_axi0_ri.arready,
-			--
-			s_axi_rdata => m_axi0_ri.rdata,
-			s_axi_rresp => m_axi0_ri.rresp,
-			s_axi_rvalid => m_axi0_ri.rvalid,
-			s_axi_rready => m_axi0_ro.rready,
-			--
-			s_axi_awaddr => m_axi0_wo.awaddr,
-			s_axi_awprot => m_axi0_wo.awprot,
-			s_axi_awvalid => m_axi0_wo.awvalid,
-			s_axi_awready => m_axi0_wi.awready,
-			--
-			s_axi_wdata => m_axi0_wo.wdata,
-			s_axi_wstrb => m_axi0_wo.wstrb,
-			s_axi_wvalid => m_axi0_wo.wvalid,
-			s_axi_wready => m_axi0_wi.wready,
-			--
-			s_axi_bresp => m_axi0_wi.bresp,
-			s_axi_bvalid => m_axi0_wi.bvalid,
-			s_axi_bready => m_axi0_wo.bready );
+    axi_lite_slave_inst : entity work.axi_lite_slave
+	port map (
+		s_axi_aclk => m_axi0_aclk,	
+		s_axi_areset_n => m_axi0_areset_n,
+		--
+		s_axi_araddr => m_axi0_ro.araddr,
+		s_axi_arprot => m_axi0_ro.arprot,
+		s_axi_arvalid => m_axi0_ro.arvalid,
+		s_axi_arready => m_axi0_ri.arready,
+		--
+		s_axi_rdata => m_axi0_ri.rdata,
+		s_axi_rresp => m_axi0_ri.rresp,
+		s_axi_rvalid => m_axi0_ri.rvalid,
+		s_axi_rready => m_axi0_ro.rready,
+		--
+		s_axi_awaddr => m_axi0_wo.awaddr,
+		s_axi_awprot => m_axi0_wo.awprot,
+		s_axi_awvalid => m_axi0_wo.awvalid,
+		s_axi_awready => m_axi0_wi.awready,
+		--
+		s_axi_wdata => m_axi0_wo.wdata,
+		s_axi_wstrb => m_axi0_wo.wstrb,
+		s_axi_wvalid => m_axi0_wo.wvalid,
+		s_axi_wready => m_axi0_wi.wready,
+		--
+		s_axi_bresp => m_axi0_wi.bresp,
+		s_axi_bvalid => m_axi0_wi.bvalid,
+		s_axi_bready => m_axi0_wo.bready );
 
 end RTL;
